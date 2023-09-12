@@ -1,0 +1,22 @@
+export const Products = [
+    {id: 1, name: "Camperón Independiente Puma", brand: "Puma", price: 43999, size: "L", garment: "Campera", img: "https://i.postimg.cc/Ghjmy3XY/camperon-independiente.jpg", category: "independiente"},
+    {id: 2, name: "Campera De Independiente Puma Entrenamiento Roja", brand: "Puma", price: 19319, size: "M", garment: "Campera", img: "https://i.postimg.cc/kXjdC2jj/campera-independiente.jpg", category: "independiente"},
+    {id: 3, name: "Camiseta De Independiente Puma Oficial Roja", brand: "Puma", price: 9369, size: "M", garment: "Remera", img: "https://i.postimg.cc/SxrYk7BB/camiseta-independiente.jpg", category: "independiente"}, 
+    {id: 4, name: "Pantalón De Independiente Puma Pro Entrenamiento Negro", brand: "Puma", price: 10649, size: "S", garment: "Pantalon", img: "https://i.postimg.cc/8CpXtGQq/pantalon-independiente.jpg", category: "independiente"},
+    {id: 5, name: "Conjunto De Boca Adidas Azul", brand: "Adidas", price: 44440, size: "L", garment: "Campera", img: "https://i.postimg.cc/gcXSM4Qk/conjunto-boca.jpg", category: "boca"},
+    {id: 6, name: "Camiseta De Boca Adidas Tercer Recambio Authentic Azul", brand: "Adidas", price: 15399, size: "S", garment: "Remera", img: "https://i.postimg.cc/T1gcTNvV/camiseta-boca.jpg", category: "boca"},
+    {id: 7, name: "Camperón De Abrigo Boca Adidas Azul", brand: "Adidas", price: 59999, size: "XL", garment: "Campera", img: "https://i.postimg.cc/tgJts4HC/camperon-boca.jpg", category: "boca"},
+    {id: 8, name: "Pantalón Adidas Boca Juniors Entrenamiento Mujer Azul", brand: "Adidas", price: 17749, size: "L", garment: "Pantalon", img: "https://i.postimg.cc/DzNQL32Q/pantalon-boca.jpg", category: "boca"},
+    {id: 9, name: "Camiseta De River Adidas Oficial Campeón Blanca", brand: "Adidas", price: 24999, size: "S", garment: "Remera", img: "https://i.postimg.cc/DzRsmQgB/camiseta-river.jpg", category: "river"},
+    {id: 10, name: "Pantalon De River Adidas Entrenamiento 22 Niño Verde", brand: "Adidas", price: 24440, size: "S", garment: "Pantalon", img: "https://i.postimg.cc/bJjJKmLc/pantalon-river.jpg", category: "river"},
+    {id: 11, name: "Ojota De River Adidas Adilette Shower Blanca", brand: "Adidas", price: 12999, size: "41", garment: "Ojota", img: "https://i.postimg.cc/2yyfJvpN/ojotas-river.jpg", category: "river"},
+    {id: 12, name: "Camiseta De River Adidas Alternativa Authentic Negra", brand: "Adidas", price: 34999, size: "M", garment: "Remera", img: "https://i.postimg.cc/KYbhbCXN/camiseta-alternativa-river.jpg", category: "river"},
+    {id: 13, name: "Camiseta Fútbol Nike Titular San Lorenzo 2023 Hombre", brand: "Nike", price: 24999, size: "L", garment: "Remera", img: "https://i.postimg.cc/yNjtHdy1/camiseta-titular-sanlorenzo.webp", category: "san lorenzo"},
+    {id: 14, name: "Camiseta De San Lorenzo Nike Alternativa Niño Blanca", brand: "Nike", price: 25999, size: "S", garment: "Remera", img: "https://i.postimg.cc/NMWWNnxm/camiseta-sanlorenzo.jpg", category: "san lorenzo"},
+    {id: 15, name: "Camiseta Nike 3° Edicion", brand: "Nike", price: 24999, size: "M", garment: "Remera", img: "../img/remera-negra-sanlorenzo.avif", category: "san lorenzo"},
+    {id: 16, name: "Campera Nike Park20 San Lorenzo", brand: "Nike", price: 19999, size: "L", garment: "Campera", img: "../img/campera-sanlorenzo.avif", category: "san lorenzo"},
+    {id: 17, name: "Camiseta De Racing Kappa Alternativa Azul", brand: "Kappa", price: 9699, size: "M", garment: "Remera", img: "https://i.postimg.cc/tg9Rksgp/camiseta-racing.jpg", category: "racing"},
+    {id: 18, name: "Camiseta De Racing Kappa Tercer Recambio Slim Blanca", brand: "Kappa", price: 9699, size: "S", garment: "Remera", img: "https://i.postimg.cc/nhG9nbjV/camiseta-blanca-racing.jpg", category: "racing"},
+    {id: 19, name: "Short De Racing Kappa Unisex Blanco", brand: "Kappa", price: 8299, size: "S", garment: "Short", img: "https://i.postimg.cc/dt8L9P9R/short-racing.jpg", category: "racing"},
+    {id: 20, name: "Pechera De Racing Kappa Entrenamiento Amarilla", brand: "Kappa", price: 7099, size: "L", garment: "Remera", img: "https://i.postimg.cc/GmLhJBtr/pechera-racing.jpg", category: "racing"}
+]
