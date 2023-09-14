@@ -28,12 +28,12 @@ export default Item;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 10,
-    marginVertical: 5,
+    borderBottomWidth: 1,
+    borderColor: Theme.colors.lightgrey,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 0,
     gap: 10,
   },
   text: {

@@ -40,14 +40,12 @@ const CategoryItem = ({ navigation, route }) => {
         <Text style={styles.text}>{category}</Text>
       </Header>
         <Search text={text} setText={setText} />
-        <BgImage>
         <FlatList
           contentContainerStyle={styles.flatListContainer}
           data={categoryProd}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <Item item={item} navigation={navigation} />}
         />
-        </BgImage>
     </SafeAreaView>
   );
 };
@@ -65,7 +63,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   flatListContainer: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
   },
 });
