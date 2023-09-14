@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React from 'react'
-import Header from '../../components/header/Header'
-import BgImage from '../../components/bgimage/BgImage'
-import Theme from '../../utils/Themes'
+import Header from '../components/header/Header'
+import BgImage from '../components/bgimage/BgImage'
+import Theme from '../utils/Themes'
 
 const Home = () => {
   return (

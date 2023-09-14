@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, FlatList, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
-import ModalSquad from '../../components/modal/Modal';
-import Header from '../../components/header/Header';
-import BgImage from '../../components/bgimage/BgImage';
-import Theme from '../../utils/Themes';
+import ModalSquad from '../components/modal/Modal';
+import Header from '../components/header/Header';
+import BgImage from '../components/bgimage/BgImage';
+import Theme from '../utils/Themes';
 
 const Live = () => {
     const [matches, setMatches] = useState([]);

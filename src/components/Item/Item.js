@@ -3,13 +3,13 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Button from '../button/Button';
 import Theme from '../../utils/Themes';
 
-const Item = ({ item }) => {
+const Item = ({ item, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image 
           style={styles.productImage}
-          source={{ uri: item.img }}
+          source={{ uri: item.img[0] }}
         />
       </View>
       <View style={styles.textContainer}>
@@ -17,7 +17,7 @@ const Item = ({ item }) => {
         <Text style={styles.price}>${item.price}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button/>
+        <Button onPress={() => navigation.navigate("itemDetail", { item: item })} />
       </View>
     </View>
   );
@@ -27,15 +27,17 @@ export default Item;
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Theme.colors.darkgrey,
+    backgroundColor: 'white',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    marginVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 0,
     gap: 10,
   },
   text: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
   },
   productImage: {
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   price: {
-    color: 'white',
+    color: 'black',
     fontStyle: 'italic',
   },
   imageContainer: {
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     gap: 10,
     borderRightWidth: 1,
-    borderRightColor: 'white',
+    borderRightColor: 'black',
   },
   buttonContainer: {
     flex: 0,

@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, SafeAreaView, FlatList, View } from 'react-native';
-import { Products } from '../../data/Products';
-import Item from '../Item/Item';
-import Header from '../header/Header';
-import BgImage from '../bgimage/BgImage';
-import Search from '../search/Search';
+import { Products } from '../data/Products';
+import Item from '../components/Item/Item';
+import Header from '../components/header/Header';
+import BgImage from '../components/bgimage/BgImage';
+import Search from '../components/search/Search';
+import Back from '../components/backbutton/Back';
 
 
-const CategoryItem = ({ category }) => {
+const CategoryItem = ({ navigation, route }) => {
   
   const [categoryProd, setCategoryProd] = useState([]);
   const [text, setText] = useState(null);
+
+  const { category } = route.params;
 
   // Elimino tildes
   const normalize = (text) => {
@@ -18,7 +21,7 @@ const CategoryItem = ({ category }) => {
   };
 
   useEffect(() => {
-    let filteredProducts = Products.filter((el) => el.category === "independiente");
+    let filteredProducts = Products.filter((el) => el.category === category);
 
     if (text) {
       const normalizedText = normalize(text).toLowerCase();
@@ -33,17 +36,18 @@ const CategoryItem = ({ category }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header>
-        <Text style={styles.text}>Independiente</Text>
+        <Back navigation={navigation}/>
+        <Text style={styles.text}>{category}</Text>
       </Header>
-      <BgImage>
         <Search text={text} setText={setText} />
+        <BgImage>
         <FlatList
           contentContainerStyle={styles.flatListContainer}
           data={categoryProd}
-          keyExtractor={(item) => item.name}
-          renderItem={({ item }) => <Item item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <Item item={item} navigation={navigation} />}
         />
-      </BgImage>
+        </BgImage>
     </SafeAreaView>
   );
 };
@@ -61,11 +65,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   flatListContainer: {
-    padding: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
   },
 });
-
-
-
-
-
