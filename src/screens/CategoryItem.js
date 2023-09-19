@@ -5,7 +5,6 @@ import Item from '../components/Item/Item';
 import Header from '../components/header/Header';
 import Search from '../components/search/Search';
 import Back from '../components/backbutton/Back';
-import Navbar from '../components/navbar/Navbar';
 
 const CategoryItem = ({ navigation, route }) => {
   const [categoryProd, setCategoryProd] = useState([]);

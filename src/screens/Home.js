@@ -107,10 +107,10 @@ const Home = ({ navigation }) => {
     const minutes = scheduledTime.getMinutes();
     let formattedTime = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   
-    let matchResult = "VS"; // Valor predeterminado
+    let matchResult = "VS";
   
     if (item?.score?.fulltime?.home !== null && item?.score?.fulltime?.away !== null) {
-      // Si hay información de resultado disponible, mostrar el resultado
+
       matchResult = `${item.score.fulltime.home} - ${item.score.fulltime.away}`;
       formattedTime = "FIN"
     }

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Image, ScrollView, Pressable } from 'react-native';
-import BgImage from '../components/bgimage/BgImage';
 import Header from '../components/header/Header';
 import Theme from '../utils/Themes';
-import { EvilIcons } from '@expo/vector-icons';
-import Navbar from '../components/navbar/Navbar';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const Login = ({ navigation }) => {
@@ -12,7 +9,7 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Agregar la lógica de inicio de sesión aquí
+
   };
 
   return (

@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, View, Image, SafeAreaView, Pressable } from 'react-native';
 import Header from '../components/header/Header';
 import { Categories } from '../data/Categories';
-import Navbar from '../components/navbar/Navbar';
 
 const Shop = ({ navigation }) => {
   return (

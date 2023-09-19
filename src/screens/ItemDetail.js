@@ -4,7 +4,6 @@ import Header from '../components/header/Header';
 import Theme from '../utils/Themes';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import Back from '../components/backbutton/Back';
-import Navbar from '../components/navbar/Navbar';
 
 const ItemDetail = ({ route, navigation }) => {
   const { item } = route.params;
