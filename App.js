@@ -5,7 +5,8 @@ import Shop from './src/screens/Shop';
 import Live from './src/screens/Live';
 import CategoryItem from './src/screens/CategoryItem';
 import { useFonts } from 'expo-font';
-import Navigation from './src/navigation/Navigation';
+import Navigation from './src/navigation/ShopNavigation';
+import TabNavigation from './src/navigation/TabNavigation';
 
 
 
@@ -22,7 +23,7 @@ export default function App() {
 
   return (
     <>
-    <Navigation/>
+    <TabNavigation/>
     </>
   );
 }

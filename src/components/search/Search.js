@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     },
     textSearch: {
         flexDirection: 'row',
+        alignItems: 'center',
         gap: 5,
         flex: 1,
     },

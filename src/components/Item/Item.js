@@ -1,15 +1,23 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
 import Button from '../button/Button';
 import Theme from '../../utils/Themes';
 
 const Item = ({ item, navigation }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
+        {!imageLoaded ? ( <ActivityIndicator size="small" color='grey' /> ) : null}
         <Image 
           style={styles.productImage}
           source={{ uri: item.img[0] }}
+          onLoad={handleImageLoad}
         />
       </View>
       <View style={styles.textContainer}>
@@ -68,5 +76,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-

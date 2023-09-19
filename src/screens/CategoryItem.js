@@ -3,13 +3,11 @@ import { StyleSheet, Text, SafeAreaView, FlatList, View } from 'react-native';
 import { Products } from '../data/Products';
 import Item from '../components/Item/Item';
 import Header from '../components/header/Header';
-import BgImage from '../components/bgimage/BgImage';
 import Search from '../components/search/Search';
 import Back from '../components/backbutton/Back';
-
+import Navbar from '../components/navbar/Navbar';
 
 const CategoryItem = ({ navigation, route }) => {
-  
   const [categoryProd, setCategoryProd] = useState([]);
   const [text, setText] = useState(null);
 
@@ -36,16 +34,22 @@ const CategoryItem = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header>
-        <Back navigation={navigation}/>
+        <Back navigation={navigation} />
         <Text style={styles.text}>{category}</Text>
       </Header>
-        <Search text={text} setText={setText} />
+      <Search text={text} setText={setText} />
+      {categoryProd.length === 0 ? (
+        <View style={styles.noResultsContainer}>
+          <Text style={styles.noResultsText}>No se encontraron resultados.</Text>
+        </View>
+      ) : (
         <FlatList
           contentContainerStyle={styles.flatListContainer}
           data={categoryProd}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <Item item={item} navigation={navigation} />}
         />
+      )}
     </SafeAreaView>
   );
 };
@@ -62,6 +66,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
-  flatListContainer: {
+  flatListContainer: {},
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noResultsText: {
+    fontSize: 15,
+    color: 'white',
   },
 });

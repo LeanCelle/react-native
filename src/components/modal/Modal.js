@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        borderTopColor: 'black',
+        borderTopColor: 'white',
         backgroundColor: 'white',
     },
     buttonClose: {

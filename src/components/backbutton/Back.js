@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 const Back = ({ navigation }) => {
   return (
     <Pressable onPress={() => navigation.goBack()}>
-      <Ionicons name="arrow-back-outline" size={24} color="white" />
+      <Ionicons name="chevron-back" size={24} color="white" />
     </Pressable>
   )
 }

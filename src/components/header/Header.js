@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import Theme from '../../utils/Themes';
 
 const Header = ({ children }) => {
   return (
@@ -15,6 +16,8 @@ const styles = {
     flexDirection: 'row',
     backgroundColor: 'black',
     justifyContent: 'start',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1A1A1A',
     paddingLeft: 15,
     alignItems: 'center',
     paddingTop: 6,

@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, View, Image, SafeAreaView, Pressable } from 'react-native';
 import Header from '../components/header/Header';
 import { Categories } from '../data/Categories';
-import BgImage from '../components/bgimage/BgImage';
+import Navbar from '../components/navbar/Navbar';
 
 const Shop = ({ navigation }) => {
   return (
@@ -10,7 +10,7 @@ const Shop = ({ navigation }) => {
       <Header>
         <Text style={styles.text}>Shop</Text>
         </Header>
-        <BgImage>
+        <Text style={styles.select}>Seleccione un equipo</Text>
         <FlatList
         contentContainerStyle={styles.flatListContainer}
         data={Categories}
@@ -25,9 +25,7 @@ const Shop = ({ navigation }) => {
             </Pressable>
           </View>
         )}
-/>
-
-            </BgImage>
+      />
     </SafeAreaView>
   );
 };
@@ -43,6 +41,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     color: 'white',
+  },
+  select: {
+    fontSize: 16,
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: '700',
+    paddingTop: 30,
   },
   flatListContainer: {
     flexGrow: 1,
