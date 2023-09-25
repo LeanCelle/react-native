@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, SafeAreaView, FlatList, View } from 'react-native';
-import { Products } from '../data/Products';
 import Item from '../components/Item/Item';
 import Header from '../components/header/Header';
 import Search from '../components/search/Search';
 import Back from '../components/backbutton/Back';
+import { useSelector } from 'react-redux';
 
 const CategoryItem = ({ navigation, route }) => {
   const [categoryProd, setCategoryProd] = useState([]);
   const [text, setText] = useState(null);
 
   const { category } = route.params;
+
+  const Products = useSelector((state) => state.shopSlice.allProducts);
+
 
   // Elimino tildes
   const normalize = (text) => {

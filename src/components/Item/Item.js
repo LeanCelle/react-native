@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
 import Button from '../button/Button';
 import Theme from '../../utils/Themes';
+import { useDispatch } from 'react-redux';
+import { setCategory, setProductSelected } from '../../redux/slice/shopSlice';
 
 const Item = ({ item, navigation }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleItem = () => {
+    dispatch(setCategory(item))
+    dispatch(setProductSelected(item))
+    navigation.navigate("itemDetail", { item: item })
+  }
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -25,7 +35,7 @@ const Item = ({ item, navigation }) => {
         <Text style={styles.price}>${item.price}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button onPress={() => navigation.navigate("itemDetail", { item: item })} />
+        <Button onPress={handleItem} />
       </View>
     </View>
   );

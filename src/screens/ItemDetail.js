@@ -9,7 +9,7 @@ const ItemDetail = ({ route, navigation }) => {
   const { item } = route.params;
 
   const productDetail = () => (
-    <>
+    <View style={styles.productContainer}>
       <View style={styles.imgContainer}>
         <FlatList
           horizontal
@@ -35,7 +35,7 @@ const ItemDetail = ({ route, navigation }) => {
         <Text style={styles.descriptionText}>Descripción:</Text>
         <Text style={styles.description}>{item.description}</Text>
       </View>
-    </>
+    </View>
   );
 
   return (
@@ -50,10 +50,12 @@ const ItemDetail = ({ route, navigation }) => {
         renderItem={productDetail}
         keyExtractor={(item) => item.id.toString()}
       />
-      <Pressable style={styles.buyPressable}>
-        <Text style={styles.buy}>AGREGAR AL CARRITO</Text>
-        <MaterialCommunityIcons name="shopping-outline" size={24} color="black" />
-      </Pressable>
+      <View style={styles.buyPressableContainer}>
+        <Pressable style={styles.buyPressable}>
+          <Text style={styles.buy}>AGREGAR AL CARRITO</Text>
+          <MaterialCommunityIcons name="shopping-outline" size={24} color="black" />
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
@@ -69,6 +71,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     color: 'white',
+  },
+  productContainer: {
+    flex: 1,
   },
   imgContainer: {
     justifyContent: 'center',
@@ -124,13 +129,22 @@ const styles = StyleSheet.create({
   description: {
     color: 'white',
   },
+  buyPressableContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buyPressable: {
+    width: '75%',
+    marginVertical: 10,
+    borderRadius: 25,
     backgroundColor: 'white',
-    paddingVertical: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    position: 'absolute',
+    bottom: 0,
   },
   buy: {
     color: 'black',

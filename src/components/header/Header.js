@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Theme from '../../utils/Themes';
 
 const Header = ({ children }) => {
   return (

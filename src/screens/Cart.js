@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, SafeAreaView } from 'react-native'
 import React from 'react'
 import Header from '../components/header/Header'
 
 
-const Cart = ({ navigation }) => {
+const Cart = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header>

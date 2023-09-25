@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, onPress, SafeAreaView } from 'react-native';
 import { useFonts } from 'expo-font';
 import TabNavigation from './src/navigation/TabNavigation';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 
 
 
@@ -17,9 +19,9 @@ export default function App() {
   }
 
   return (
-    <>
-    <TabNavigation/>
-    </>
+    <Provider store={store}>
+      <TabNavigation/>
+    </Provider>
   );
 }
 

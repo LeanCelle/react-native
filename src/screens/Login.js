@@ -4,7 +4,7 @@ import Header from '../components/header/Header';
 import Theme from '../utils/Themes';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-const Login = ({ navigation }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

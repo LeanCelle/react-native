@@ -1,73 +1,76 @@
-import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View, FlatList} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Modal, StyleSheet, Pressable, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import HeadToHead from '../HeadToHead/HeadToHead';
 
-const ModalSquad = () => {
-    
+const ModalSquad = ({ navigation, match, matches }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <>
-        <View style={styles.centeredView}>
-            <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setModalVisible(!modalVisible);
-            }}>
             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text>Proximamente: Alineaciones</Text>
-                    <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>CERRAR</Text>
-                    </Pressable>
-                </View>
-            </View>
+                <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                }}>
+              <View style={styles.modalView}>
+                <HeadToHead navigation={navigation} match={match}  matches={matches}/>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <AntDesign name="close" size={30} color="black" />
+                </Pressable>
+              </View>
             </Modal>
-        </View>
-        <View style={styles.pressableView}>
-            <Pressable
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => setModalVisible(true)}>
-            <AntDesign name="plus" size={15} color="black" />
-            </Pressable>
-        </View>
+            </View>
+            <View style={styles.pressableView}>
+                <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => {
+                        setModalVisible(true);
+                    }}>
+                    <AntDesign name="plus" size={15} color="black" />
+                </Pressable>
+            </View>
         </>
     );
 }
 
-export default ModalSquad
+export default ModalSquad;
 
 const styles = StyleSheet.create({
     centeredView: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     modalView: {
-        gap: 10,
+      width: '100%',
+      height: '100%',
       justifyContent: 'center',
       backgroundColor: 'white',
       borderRadius: 20,
-      padding: 35,
+      paddingVertical: 50,
       alignItems: 'center',
       shadowColor: '#000',
       shadowOffset: {
-      width: 0,
-      height: 2,
+          width: 0,
+          height: 2,
       },
-      shadowOpacity: 0.25,
+      shadowOpacity: 0.5,
       shadowRadius: 4,
       elevation: 5,
-    },
+  },
+  
     button: {
-      padding: 10,
-      elevation: 2,
+        padding: 10,
+        elevation: 2,
     },
     pressableView: {
         justifyContent: 'center',
@@ -82,16 +85,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     buttonClose: {
-      backgroundColor: 'red',
-      borderRadius: 5,
+        borderRadius: 5,
     },
     textStyle: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     modalText: {
-      marginBottom: 15,
-      textAlign: 'center',
+        marginBottom: 15,
+        textAlign: 'center',
     },
-  });
+});

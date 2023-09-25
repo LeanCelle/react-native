@@ -1,9 +1,34 @@
-import React from 'react';
-import { FlatList, StyleSheet, Text, View, Image, SafeAreaView, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, StyleSheet, Text, View, Image, SafeAreaView, Pressable, ActivityIndicator } from 'react-native';
 import Header from '../components/header/Header';
-import { Categories } from '../data/Categories';
+import { useSelector } from 'react-redux';
 
 const Shop = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedImages, setLoadedImages] = useState([]);
+
+  const Categories = useSelector((state) => state.shopSlice.allCategories);
+
+
+  useEffect(() => {
+
+    const loadImages = async () => {
+      const loadedImages = await Promise.all(
+        Categories.map(async (item) => {
+          const response = await fetch(item.img);
+          const data = await response.blob();
+          return URL.createObjectURL(data);
+        })
+      );
+  
+      setLoadedImages(loadedImages);
+      setIsLoading(false);
+    };
+  
+    loadImages();
+  }, []);
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <Header>
@@ -11,20 +36,25 @@ const Shop = ({ navigation }) => {
         </Header>
         <Text style={styles.select}>Seleccione un equipo</Text>
         <FlatList
-        contentContainerStyle={styles.flatListContainer}
-        data={Categories}
-        key={(item) => item.name}
-        renderItem={({ item }) => (
-          <View style={styles.categoryContainer}>
-            <Pressable onPress={() => navigation.navigate("categoryItem", { category: item.category })}>
-              <Image 
-                style={styles.categoryImage}
-                source={{ uri: item.img }}
-              />
-            </Pressable>
-          </View>
-        )}
-      />
+          contentContainerStyle={styles.flatListContainer}
+          data={Categories}
+          key={(item) => item.name}
+          renderItem={({ item, index }) => (
+        <View style={styles.categoryContainer}>
+        <Pressable onPress={() => navigation.navigate("categoryItem", { category: item.category })}>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="white" />
+          ) : (
+            <Image
+              style={styles.categoryImage}
+              source={{ uri: loadedImages[index] }}
+            />
+          )}
+        </Pressable>
+      </View>
+  )}
+/>
+
     </SafeAreaView>
   );
 };
@@ -63,4 +93,3 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
 });
-

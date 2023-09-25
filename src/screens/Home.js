@@ -51,7 +51,6 @@ const Home = ({ navigation }) => {
     "Liga MX",
     "Premier League",
     "FA Cup",
-    "League Cup",
     "La Liga",
     "Serie A",
     "Ligue 1",
@@ -73,12 +72,12 @@ const Home = ({ navigation }) => {
 
   const groupMatchesByLeague = (matches) => {
     const leagueData = {};
-  
+
     matches.forEach((match) => {
       const leagueName = match?.league?.name;
       const leagueCountry = match?.league?.country;
       const uniqueLeagueName = `${leagueCountry} - ${leagueName}`;
-  
+
       if (leaguesToShow.includes(leagueName)) {
         if (!leagueData[uniqueLeagueName]) {
           leagueData[uniqueLeagueName] = {
@@ -89,30 +88,32 @@ const Home = ({ navigation }) => {
         leagueData[uniqueLeagueName].matches.push(match);
       }
     });
-  
+
     const uniqueLeagues = Object.entries(leagueData).map(([leagueName, data]) => ({
       key: leagueName,
       leagueName: leagueName.split(' - ')[1],
       matches: data?.matches,
       logo: data?.logo,
-      flag: data?.flag,
     }));
-  
+
     return uniqueLeagues;
   };
 
   const renderMatchItem = ({ item }) => {
+    if (!item) {
+      return null;
+    }
+
     const scheduledTime = new Date(item?.fixture?.date);
     const hour = scheduledTime.getHours();
     const minutes = scheduledTime.getMinutes();
     let formattedTime = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  
-    let matchResult = "VS";
-  
-    if (item?.score?.fulltime?.home !== null && item?.score?.fulltime?.away !== null) {
 
+    let matchResult = "VS";
+
+    if (item?.score?.fulltime?.home !== null && item?.score?.fulltime?.away !== null) {
       matchResult = `${item.score.fulltime.home} - ${item.score.fulltime.away}`;
-      formattedTime = "FIN"
+      formattedTime = "FIN";
     }
 
     return (
@@ -133,7 +134,7 @@ const Home = ({ navigation }) => {
             <Text style={styles.teamName} numberOfLines={2}>{item?.teams?.away?.name}</Text>
           </View>
           <View>
-            <ModalSquad/>
+            <ModalSquad navigation={navigation} match={item} matches={matches} />
           </View>
         </View>
       </View>
@@ -161,9 +162,8 @@ const Home = ({ navigation }) => {
               renderItem={({ item }) => (
                 <View key={item.key}>
                   <View style={styles.leagueContainer}>
-                    <Image source={{ uri: item?.league?.flag }} style={styles.leagueFlag} />
-                    <Text style={styles.leagueTitle}>{item.leagueName}</Text>
                     <Image source={{ uri: item?.logo }} style={styles.leagueLogo} />
+                    <Text style={styles.leagueTitle}>{item.leagueName}</Text>
                   </View>
                   <FlatList
                     data={item.matches}

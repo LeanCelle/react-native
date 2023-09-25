@@ -3,7 +3,6 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Navigation from './ShopNavigation';
 import Live from '../screens/Live';
-import Home from '../screens/Home';
 import Cart from '../screens/Cart';
 import Login from '../screens/Login';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,6 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Theme from '../utils/Themes';
+import Home from '../screens/Home';
 
 const TabNavigation = () => {
     
@@ -19,7 +19,7 @@ const TabNavigation = () => {
 
   return (
     <NavigationContainer styles={styles.tabBar}>
-        <Tab.Navigator initialRouteName="cart" screenOptions={{ title: "", headerShown: false, tabBarStyle: styles.tabBar }}>
+        <Tab.Navigator initialRouteName="shopNavigation" screenOptions={{ title: "", headerShown: false, tabBarStyle: styles.tabBar }}>
             <Tab.Screen options={{tabBarIcon: ({ focused }) => ( 
             <Ionicons name="ios-football-outline" size={30} color={focused ? Theme.colors.darkgreen : "white"} /> )}} 
             name="home" 

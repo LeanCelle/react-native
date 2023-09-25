@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
 import Theme from '../../utils/Themes';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -17,7 +17,7 @@ const Search = ({ text, setText }) => {
             onChangeText={(value) => setText(value)}
             value={text}
             style={styles.input}
-            placeholder="Busca un producto aquí.."
+            placeholder="Busca un producto aquí                                          "
             placeholderTextColor={'black'}
             />
         </View>

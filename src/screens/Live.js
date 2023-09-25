@@ -62,7 +62,7 @@ const Live = ({ navigation }) => {
                         <Text style={styles.teamName} numberOfLines={2}>{item?.teams?.away?.name}</Text>
                     </View>
                     <View>
-                        <ModalSquad />
+                        <ModalSquad navigation={navigation} match={item} matches={matches} />
                     </View>
                 </View>
             </View>
