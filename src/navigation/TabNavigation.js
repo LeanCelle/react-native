@@ -12,6 +12,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Theme from '../utils/Themes';
 import Home from '../screens/Home';
+import Post from '../screens/Post';
 
 const TabNavigation = () => {
     
@@ -34,8 +35,8 @@ const TabNavigation = () => {
             component={Navigation}/>
 
             <Tab.Screen options={{tabBarIcon: ({ focused }) => ( <AntDesign name="shoppingcart" size={30} color={focused ? Theme.colors.darkgreen : "white"} /> )}} 
-            name="cart" 
-            component={Cart}/>
+            name="post" 
+            component={Post}/>
 
             <Tab.Screen options={{tabBarIcon: ({ focused }) => ( <FontAwesome5 name="user-circle" size={30} color={focused ? Theme.colors.darkgreen : "white"} /> )}} 
             name="login" 

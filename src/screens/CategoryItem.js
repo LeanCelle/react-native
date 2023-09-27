@@ -5,6 +5,7 @@ import Header from '../components/header/Header';
 import Search from '../components/search/Search';
 import Back from '../components/backbutton/Back';
 import { useSelector } from 'react-redux';
+import { useGetProductsQuery } from '../services/RealAPI';
 
 const CategoryItem = ({ navigation, route }) => {
   const [categoryProd, setCategoryProd] = useState([]);
@@ -12,7 +13,10 @@ const CategoryItem = ({ navigation, route }) => {
 
   const { category } = route.params;
 
-  const Products = useSelector((state) => state.shopSlice.allProducts);
+  const { data: Products } = useGetProductsQuery();
+
+
+  //const Products = useSelector((state) => state.shopSlice.allProducts);
 
 
   // Elimino tildes
@@ -21,17 +25,20 @@ const CategoryItem = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    let filteredProducts = Products.filter((el) => el.category === category);
-
-    if (text) {
-      const normalizedText = normalize(text).toLowerCase();
-      filteredProducts = filteredProducts.filter((el) =>
-        normalize(el.name).toLowerCase().includes(normalizedText)
-      );
+    if (Products) {
+      let filteredProducts = Products.filter((el) => el.category === category);
+  
+      if (text) {
+        const normalizedText = normalize(text).toLowerCase();
+        filteredProducts = filteredProducts.filter((el) =>
+          normalize(el.name).toLowerCase().includes(normalizedText)
+        );
+      }
+  
+      setCategoryProd(filteredProducts);
     }
-
-    setCategoryProd(filteredProducts);
-  }, [text, category]);
+  }, [text, category, Products]);
+  
 
   return (
     <SafeAreaView style={styles.container}>

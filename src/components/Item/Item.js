@@ -8,11 +8,8 @@ import { setCategory, setProductSelected } from '../../redux/slice/shopSlice';
 const Item = ({ item, navigation }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const dispatch = useDispatch();
 
   const handleItem = () => {
-    dispatch(setCategory(item))
-    dispatch(setProductSelected(item))
     navigation.navigate("itemDetail", { item: item })
   }
 
