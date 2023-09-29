@@ -14,7 +14,11 @@ export const RealAPI = createApi({
     getProducts: builder.query({
       query: () => "Products.json",
     }),
+
+    getPost: builder.query({
+      query: () => "posts.json",
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useGetProductsQuery } = RealAPI;
+export const { useGetCategoriesQuery, useGetProductsQuery, useGetPostQuery } = RealAPI;

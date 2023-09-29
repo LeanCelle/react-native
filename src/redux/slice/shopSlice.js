@@ -1,15 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Categories } from "../../data/Categories";
-import { Products } from "../../data/Products";
 
 const shopSlice = createSlice({
 
     name: "shop",
 
     initialState: {
-
-        allCategories: Categories,
-        allProducts: Products,
+        
         categorySelected: "",
         productsFilterByCategory: [],
         productsSelected: {},
