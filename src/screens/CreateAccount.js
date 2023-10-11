@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setIdToken, setUser } from '../redux/slice/authSlice';
 import { firebase_auth } from "../firebase/firebase_auth";
 import { get, getDatabase, ref, set } from 'firebase/database';
+import Back from '../components/backbutton/Back';
 
 const CreateAccount = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -36,6 +37,30 @@ const CreateAccount = ({ navigation }) => {
     });
   };
 
+  // Función para validar la contraseña
+  const isPasswordValid = (password) => {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
+    return regex.test(password);
+  };
+
+  const handleRegister = async () => {
+    setTouchedFields({
+      nombre: true,
+      apellido: true,
+      nombreUsuario: true,
+      correo: true,
+      contraseña: true,
+      repetirContraseña: true,
+    });
+
+    // Validar la contraseña
+    if (!isPasswordValid(formData.contraseña)) {
+      setPasswordError('Por favor, ingresa una contraseña con al menos 7 caracteres, incluyendo letras y números.');
+      return;
+    } else {
+      setPasswordError('');
+    }
+
   // Función para agregar los datos del usuario a la base de datos
   const addUserDataToDatabase = async (userId, nombreUsuario, correo) => {
     const db = getDatabase();
@@ -53,29 +78,17 @@ const CreateAccount = ({ navigation }) => {
       console.error("Error al agregar datos del usuario a la base de datos:", error);
     }
   };
-
-  const handleRegister = async () => {
-    setTouchedFields({
-      nombre: true,
-      apellido: true,
-      nombreUsuario: true,
-      correo: true,
-      contraseña: true,
-      repetirContraseña: true,
-    });
   
-    // Verificar si el nombre de usuario ya existe en la base de datos
     const usernameExists = await checkUsernameExists(formData.nombreUsuario);
   
     if (usernameExists) {
       Alert.alert("El nombre de usuario ya está en uso. Por favor, elige otro.");
-      return; // Evitar continuar con el registro
+      return;
     }
   
-    // Validar que los campos de nombre y apellido estén completos
     if (formData.nombre.trim() === '' || formData.apellido.trim() === '') {
       Alert.alert("Por favor, ingresa un nombre y un apellido válidos.");
-      return; // Evitar continuar con el registro
+      return;
     }
   
     try {
@@ -89,14 +102,12 @@ const CreateAccount = ({ navigation }) => {
         displayName: formData.nombreUsuario,
       });
   
-      // Agrega los datos del usuario a la base de datos
       await addUserDataToDatabase(response.user.uid, formData.nombreUsuario, email);
   
       dispatch(setUser(response.user.email));
       dispatch(setIdToken(response._tokenResponse.idToken));
       console.log(response);
     } catch (e) {
-      // Maneja la excepción cuando se ingresa un correo electrónico no válido
       if (e.code === 'auth/invalid-email') {
         Alert.alert("Email inválido. Por favor, ingresa un correo electrónico válido.");
       } else {
@@ -121,8 +132,11 @@ const CreateAccount = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Back navigation={navigation}/>
+      </View>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Ingresa tus datos</Text>
+        <Text style={styles.title}>Ingrese sus datos</Text>
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Nombre</Text>
           <TextInput
@@ -217,6 +231,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
+  header: {
+    backgroundColor: 'black',
+    width: 40,
+    justifyContent: 'start',
+    alignItems: 'center',
+    borderRadius: 10,
+    paddingVertical: 6,
+    marginLeft: 15,
+  },
+  text: {
+    color: 'white',
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -265,12 +291,3 @@ const styles = StyleSheet.create({
 });
 
 export default CreateAccount;
-
-
-
-
-
-
-
-
-

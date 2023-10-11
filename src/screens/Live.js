@@ -1,142 +1,101 @@
-import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
-import ModalSquad from '../components/modal/Modal';
 import Header from '../components/header/Header';
 import Theme from '../utils/Themes';
+import LiveApiCalls from '../services/LiveApiCalls';
+import RenderInLive from '../components/renderItems/renderInLive';
 
-const Live = ({ navigation }) => {
-    const [matches, setMatches] = useState([]);
-    const [loading, setLoading] = useState(true);
+const Live = ( { navigation } ) => {
 
-    useEffect(() => {
-        fetch("http://v3.football.api-sports.io/fixtures?live=all", {
-            method: "GET",
-            headers: {
-                "x-rapidapi-key": "d00546b141e9f51b3f92baefe6c7a5ab",
-                "x-rapidapi-host": "v3.football.api-sports.io",
-            },
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data.response);
-            setMatches(data.response);
-            setLoading(false);
-        })
-        .catch((error) => {
-            console.log('error', error);
-            setLoading(false);
-        });
-    }, []);
+  const { matches, loading } = LiveApiCalls();
 
-    const groupedMatches = {};
-    matches.forEach((match) => {
-        const leagueName = match?.league?.name;
-        if (!groupedMatches[leagueName]) {
-            groupedMatches[leagueName] = [];
-        }
-        groupedMatches[leagueName].push(match);
-    });
+  const renderData = RenderInLive({ navigation, matches, styles });
 
-    const renderMatchItem = ({ item }) => {
-        const fixtureStatus = item?.fixture?.status?.short;
-        const elapsedText = fixtureStatus === "FT" ? "Final" : fixtureStatus === "HT" ? "ET" : `${item?.fixture?.status?.elapsed}'`;
-
-        return (
-            <View style={styles.matchContainer} key={item?.fixture?.id}>
-                <View style={styles.teamsContainer}>
-                    <View style={styles.time}>
-                        <Text style={styles.elapsedText}>{elapsedText}</Text>
-                    </View>
-                    <View style={styles.teamContainer}>
-                        <Image source={{ uri: item?.teams?.home?.logo }} style={styles.logo} />
-                        <Text style={styles.teamName} numberOfLines={2}>{item?.teams?.home?.name}</Text>
-                    </View>
-                    <View style={styles.allGoals}>
-                        <Text style={styles.goals}>{item?.goals?.home}</Text>
-                        <Text style={styles.line}>-</Text>
-                        <Text style={styles.goals}>{item?.goals?.away}</Text>
-                    </View>
-                    <View style={styles.teamContainer}>
-                        <Image source={{ uri: item?.teams?.away?.logo }} style={styles.logo} />
-                        <Text style={styles.teamName} numberOfLines={2}>{item?.teams?.away?.name}</Text>
-                    </View>
-                    <View>
-                        <ModalSquad navigation={navigation} match={item} matches={matches} />
-                    </View>
-                </View>
-            </View>
-        );
-    };
-
-    const leagueSections = Object.keys(groupedMatches).map((leagueName) => ({
-        title: leagueName,
-        data: groupedMatches[leagueName],
-    }));
-
-    return (
-        <SafeAreaView style={styles.container}>
-            <Header>
-                <Text style={styles.text}>Partidos en vivo</Text>
-            </Header>
-            {loading ? (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color="grey" />
-                </View>
-            ) : (
-                <>
-                {matches.length > 0 ? (
-                <FlatList
-                    data={leagueSections}
-                    keyExtractor={(item) => item.title}
-                    renderItem={({ item }) => (
-                    <View key={item.title}>
-                        <View style={styles.leagueContainer}>
-                            <Text style={styles.league}>{item.title}</Text>
-                                <Image
-                                    source={{ uri: item.data[0]?.league?.logo }}
-                                    style={styles.leagueLogo}
+  return (
+    <SafeAreaView style={styles.container}>
+      <Header>
+        <Text style={styles.text}>Partidos en vivo</Text>
+      </Header>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="grey" />
+        </View>
+      ) : (
+        <>
+          {matches.length > 0 ? (
+            <FlatList
+              data={renderData.leagueSections}
+              keyExtractor={(item) => item.title}
+              renderItem={({ item }) => (
+                <View key={item.title}>
+                  <View style={styles.leagueContainer}>
+                    <Text style={styles.league}>{item.title}</Text>
+                    <Image
+                      source={{ uri: item.data[0]?.league?.logo }}
+                      style={styles.leagueLogo}
+                    />
+                  </View>
+                  <View>
+                    {item.data.map((match) => (
+                      <View key={match?.fixture?.id}>
+                        {renderData.renderMatchItem({ item: match })}
+                        <View style={styles.goalsView}>
+                          <View style={styles.playerGoalHome}>
+                            {match.events.filter(
+                              (event) =>
+                                event.type === "Goal" &&
+                                event?.team?.id === match?.teams?.home?.id
+                            ).map((goalEvent, index) => (
+                              <Text
+                                key={index}
+                                style={styles.playersGoals}
+                              >
+                                {goalEvent?.player?.name}
+                                <Ionicons
+                                  name="md-football"
+                                  size={10}
+                                  color="black"
                                 />
-                                </View>
-                                    <View>
-                                        {item.data.map((match) => (
-                                        <View key={match?.fixture?.id}>
-                                            {renderMatchItem({ item: match })}
-                                            <View style={styles.goalsView}>
-                                                <View style={styles.playerGoalHome}>
-                                                    {match.events.filter((event) => event.type === "Goal" && event?.team?.id === match?.teams?.home?.id)
-                                                    .map((goalEvent, index) => (
-                                                    <Text key={index} style={styles.playersGoals}>
-                                                        {goalEvent?.player?.name}
-                                                        <Ionicons name="md-football" size={10} color="black" />
-                                                    </Text>
-                                                    ))}
-                                                </View>
-                                                <View style={styles.playerGoalAway}>
-                                                    {match.events.filter((event) => event.type === "Goal" && event?.team?.id === match?.teams?.away?.id)
-                                                    .map((goalEvent, index) => (
-                                                    <Text key={index} style={styles.playersGoals}>
-                                                        {goalEvent?.player?.name}
-                                                        <Ionicons name="md-football" size={10} color="black" />
-                                                    </Text>
-                                                    ))}
-                                                </View>
-                                            </View>
-                                        </View>
-                                        ))}
-                                    </View>
-                                </View>
-                            )}
-                        />
-                    ) : (
-                    <View style={styles.noMatchesContainer}>
-                        <Text style={styles.noMatchesText}>No hay partidos en vivo en este momento</Text>
-                    </View>
-                    )}
-                </>
-            )}
-        </SafeAreaView>
-    );
+                              </Text>
+                            ))}
+                          </View>
+                          <View style={styles.playerGoalAway}>
+                            {match.events.filter(
+                              (event) =>
+                                event.type === "Goal" &&
+                                event?.team?.id === match?.teams?.away?.id
+                            ).map((goalEvent, index) => (
+                              <Text
+                                key={index}
+                                style={styles.playersGoals}
+                              >
+                                {goalEvent?.player?.name}
+                                <Ionicons
+                                  name="md-football"
+                                  size={10}
+                                  color="black"
+                                />
+                              </Text>
+                            ))}
+                          </View>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            />
+          ) : (
+            <View style={styles.noMatchesContainer}>
+              <Text style={styles.noMatchesText}>
+                No hay partidos en vivo en este momento
+              </Text>
+            </View>
+          )}
+        </>
+      )}
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({

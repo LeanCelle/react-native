@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, Text, View, Image, SafeAreaView, Pressable, ActivityIndicator } from 'react-native';
 import Header from '../components/header/Header';
-import { useSelector } from 'react-redux';
 import { useGetCategoriesQuery } from '../services/RealAPI';
 
 const Shop = ({ navigation }) => {

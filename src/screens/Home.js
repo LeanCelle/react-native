@@ -1,74 +1,15 @@
-import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, Image, ActivityIndicator } from 'react-native';
 import Header from '../components/header/Header';
 import Theme from '../utils/Themes';
-import ModalSquad from '../components/modal/Modal';
+import HomeApiCalls from '../services/HomeApiCalls';
+import RenderInHome from '../components/renderItems/renderHome';
 
 const Home = ({ navigation }) => {
-  const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
+  const { matches, loading, leaguesToShow } = HomeApiCalls();
 
-    fetch(`http://v3.football.api-sports.io/fixtures?date=${formattedDate}`, {
-      method: "GET",
-      headers: {
-        "x-rapidapi-key": "d00546b141e9f51b3f92baefe6c7a5ab",
-        "x-rapidapi-host": "v3.football.api-sports.io",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.response);
-        setMatches(data.response);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('error', error);
-        setLoading(false);
-      });
-  }, []);
+  const renderData = RenderInHome({ navigation, matches, styles });
 
-  const leaguesToShow = [
-    "Liga Profesional Argentina",
-    "Copa de la Liga Profesional",
-    "Trofeo de Campeones de la Superliga",
-    "Super Copa",
-    "Primera Nacional",
-    "Primera B Metropolitana",
-    "Primera C",
-    "Primera D",
-    "Torneo Federal A",
-    "Reserve League",
-    "Copa Argentina",
-    "Copa Do Brasil",
-    "CONMEBOL Libertadores",
-    "CONMEBOL Sudamericana",
-    "Major League Soccer",
-    "Pro League",
-    "Liga MX",
-    "Premier League",
-    "FA Cup",
-    "La Liga",
-    "Serie A",
-    "Ligue 1",
-    "Bundesliga",
-    "UEFA Champions League",
-    "Euro Championship",
-    "UEFA Nations League",
-    "UEFA Europa League",
-    "Conference League",
-    "World Cup",
-    "World Cup - Women",
-    "Friendlies",
-    "Copa America",
-    "Eurocopa",
-    "World Cup - Qualification South America",
-    "World Cup - Qualification Europe",
-    "FIFA Club World Cup",
-  ];
 
   const groupMatchesByLeague = (matches) => {
     const leagueData = {};
@@ -99,52 +40,10 @@ const Home = ({ navigation }) => {
     return uniqueLeagues;
   };
 
-  const renderMatchItem = ({ item }) => {
-    if (!item) {
-      return null;
-    }
-
-    const scheduledTime = new Date(item?.fixture?.date);
-    const hour = scheduledTime.getHours();
-    const minutes = scheduledTime.getMinutes();
-    let formattedTime = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-    let matchResult = "VS";
-
-    if (item?.score?.fulltime?.home !== null && item?.score?.fulltime?.away !== null) {
-      matchResult = `${item.score.fulltime.home} - ${item.score.fulltime.away}`;
-      formattedTime = "FIN";
-    }
-
-    return (
-      <View style={styles.matchContainer}>
-        <View style={styles.teamsContainer}>
-          <View style={styles.hourContainer}>
-            <Text style={styles.hourText}>{formattedTime}</Text>
-          </View>
-          <View style={styles.teamContainer}>
-            <Image source={{ uri: item?.teams?.home?.logo }} style={styles.logo} />
-            <Text style={styles.teamName} numberOfLines={2}>{item?.teams?.home?.name}</Text>
-          </View>
-          <View style={styles.scoreContainer}>
-            <Text style={styles.elapsedText}>{matchResult}</Text>
-          </View>
-          <View style={styles.teamContainer}>
-            <Image source={{ uri: item?.teams?.away?.logo }} style={styles.logo} />
-            <Text style={styles.teamName} numberOfLines={2}>{item?.teams?.away?.name}</Text>
-          </View>
-          <View>
-            <ModalSquad navigation={navigation} match={item} matches={matches} />
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Header>
-        <Text style={styles.text}>DE PRIMERA</Text>
+        <Text style={styles.text}>Partidos del día</Text>
       </Header>
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -167,7 +66,7 @@ const Home = ({ navigation }) => {
                   </View>
                   <FlatList
                     data={item.matches}
-                    renderItem={renderMatchItem}
+                    renderItem={renderData?.renderMatchItem}
                     keyExtractor={(_, index) => index.toString()}
                   />
                 </View>
@@ -187,8 +86,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    fontFamily: Theme.fontFamily.QuicksandBold,
-    letterSpacing: 4,
+    fontWeight: 'bold',
     fontSize: 20,
     color: 'white',
   },

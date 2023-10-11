@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign } from '@expo/vector-icons';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { app } from '../firebase/firebase_auth';
 import { getDatabase, ref as dbRef, push, set } from 'firebase/database';
 import Back from '../components/backbutton/Back';
 import Header from '../components/header/Header';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../firebase/firebase_auth';
 
 const CreatePost = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -35,61 +34,80 @@ const CreatePost = ({ navigation }) => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0,
+        quality: 1,
+        base64: true,
       });
+      
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const selectedAsset = result.assets[0];
+        const base64Image = `data:${selectedAsset.type};base64,${selectedAsset.base64}`;
 
-      if (result.canceled) {
-        console.log('Selección de imagen cancelada');
-      } else if (result.assets && result.assets.length > 0 && setDescription() !== '') {
-        setSelectedImage(result.assets[0].uri);
-        setPostReady(true);
+      if (selectedAsset.base64.length > 10485760) {
+          Alert.alert('La imagen seleccionada supera el tamaño máximo permitido (10 MB).');
+        } else {
+          setSelectedImage(base64Image);
+          setPostReady(true);
+        }
       }
     } catch (error) {
       console.error('Error al seleccionar la imagen:', error);
     }
   };
 
-  const uploadImage = async (uri) => {
-    setUploading(true);
-
-    const storage = getStorage(app);
-    const storageRef = ref(storage, 'images/' + new Date().getTime());
-
-    try {
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      await uploadBytes(storageRef, blob);
-      const downloadURL = await getDownloadURL(storageRef);
-      saveImageUrlToDatabase(downloadURL);
-    } catch (error) {
-      console.error('Error al subir la imagen:', error);
-    } finally {
-      setUploading(false);
+  const openCamera = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+  
+    if (permissionResult.granted === false) {
+      alert("No le has dado permiso a la Aplicación para acceder a tu cámara!");
+      return;
+    } else {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        aspect: [1, 1],
+        quality: 1,
+        base64: true,
+      });
+  
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        setSelectedImage(result.assets[0].uri);
+        setPostReady(true);
+      }
     }
   };
+  
 
-  const saveImageUrlToDatabase = (imageUrl) => {
+  const saveImageToDatabase = async (base64Image) => {
+    setUploading(true);
+
     const db = getDatabase(app);
-    const postRef = dbRef(db, 'posts');
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    const newPostRef = push(postRef);
+    if (user) {
+      const userId = user.uid;
+      const postsRef = dbRef(db, 'posts/');
 
-    const postData = {
-      imageUrl: imageUrl,
-      userName: userDisplayName,
-      description: description,
-    };
+      try {
+        const newPostRef = push(postsRef);
+        const postData = {
+          userName: userDisplayName,
+          imageUrl: base64Image,
+          description: description,
+          likes: {},
+        };
 
-    set(newPostRef, postData, (error) => {
-      if (error) {
-        console.error('Error al subir la publicación:', error);
-      } else {
+        await set(newPostRef, postData);
         console.log('Publicación subida con éxito.');
         setSelectedImage(null);
         setPostReady(false);
         setDescription('');
+      } catch (error) {
+        console.error('Error al subir la publicación:', error);
+      } finally {
+        setUploading(false);
       }
-    });
+    }
   };
 
   const handleUploadPost = () => {
@@ -97,14 +115,40 @@ const CreatePost = ({ navigation }) => {
       console.log('Debes seleccionar una imagen antes de subir la publicación.');
       return;
     }
-  
+
     if (!description) {
       Alert.alert('Debes ingresar una descripción antes de subir la publicación.');
       return;
     }
-  
-    uploadImage(selectedImage);
+
+    saveImageToDatabase(selectedImage);
     navigation.navigate('post');
+  };
+
+  const showImagePickerAlert = () => {
+    Alert.alert(
+      'Seleccionar imagen',
+      'Elige la opción donde quiera seleccionar su imagen:',
+      [
+        {
+          text: 'Abrir galería',
+          onPress: () => {
+            selectImageFromGallery();
+          },
+        },
+        {
+          text: 'Abrir cámara',
+          onPress: () => {
+            openCamera();
+          },
+        },
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -119,14 +163,14 @@ const CreatePost = ({ navigation }) => {
           {selectedImage ? (
             <>
               <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
-              <TouchableOpacity onPress={selectImageFromGallery} style={styles.changeImageButton}>
+              <TouchableOpacity onPress={showImagePickerAlert} style={styles.changeImageButton}>
                 <Text style={styles.changeImageText}>Cambiar imagen</Text>
               </TouchableOpacity>
             </>
           ) : (
             <View style={styles.plusContainer}>
-              <TouchableOpacity onPress={selectImageFromGallery}>
-                <AntDesign style={styles.plus} name="plus" size={24} color="black" />
+              <TouchableOpacity onPress={showImagePickerAlert}>
+                <AntDesign style={styles.plus} name="plus" size={30} color="black" />
               </TouchableOpacity>
             </View>
           )}
@@ -138,8 +182,9 @@ const CreatePost = ({ navigation }) => {
               placeholderTextColor={'white'}
               value={description}
               onChangeText={(text) => setDescription(text)}
-            />
+              />
           </View>
+          <Text style={styles.preview}>(Previsualización de tu post)</Text>
           <TouchableOpacity
             onPress={handleUploadPost}
             style={styles.shareTouchable}
@@ -147,7 +192,6 @@ const CreatePost = ({ navigation }) => {
           >
             <Text style={[styles.shareText, { color: postReady ? 'green' : 'gray' }]}>Compartir</Text>
           </TouchableOpacity>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -164,8 +208,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
+  preview: {
+    color: 'white',
+    textAlign: 'center',
+    fontStyle: 'italic',
+    paddingHorizontal: 10,
+    marginVertical: 30,
+    fontSize: 15,
+  },
   postContainer: {
-    marginVertical: 20,
+    marginVertical: 40,
   },
   userName: {
     color: 'white',
@@ -197,7 +249,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     flexDirection: 'row',
-    marginLeft: 10,
+    marginHorizontal: 10,
     marginTop: 15,
     gap: 6,
   },
@@ -207,13 +259,20 @@ const styles = StyleSheet.create({
   },
   descriptionInput: {
     color: 'white',
+    width: '80%',
+  },
+  preview: {
+    color: 'white',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    marginVertical: 30,
+    fontSize: 15,
   },
   shareTouchable: {
     backgroundColor: 'white',
     marginHorizontal: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
     padding: 10,
     borderRadius: 15,
   },
@@ -223,10 +282,3 @@ const styles = StyleSheet.create({
 });
 
 export default CreatePost;
-
-
-
-
-
-
-
