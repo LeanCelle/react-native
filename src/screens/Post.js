@@ -222,9 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
-  plus: {
-    marginLeft: 10,
-  },
   imageContainer: {
     width: '100%',
     marginVertical: 20,

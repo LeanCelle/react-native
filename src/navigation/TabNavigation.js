@@ -1,12 +1,14 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import { StyleSheet } from 'react-native';
 import Navigation from './ShopNavigation';
 import Live from '../screens/Live';
 import Theme from '../utils/Themes';
 import Home from '../screens/Home';
 import PostNavigation from './PostNavigation';
+import Profile from '../screens/Profile';
 
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -50,6 +52,16 @@ const TabNavigation = () => {
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons name="shopping-outline" size={30} color={focused ? Theme.colors.darkgreen : "white"} />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome5 name="user-circle" size={28} color={focused ? Theme.colors.darkgreen : "white"} />
             ),
           }}
         />

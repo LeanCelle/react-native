@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
   },
   dePrimera: {
     color: Theme.colors.darkgrey,
-    fontWeight: '900',
+    fontWeight: '700',
+    fontStyle: 'italic',
   },
 });
 
